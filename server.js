@@ -31,6 +31,11 @@ mongoose.connect(process.env.MONGO_URI, {
 // Use Routes
 app.use("/api/bookings", bookingRoutes);
 
+//booking data 
+app.get("/show-booking", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "showbooking.html"));
+});
+
 
 // Start the server
 app.listen(PORT, () => {
