@@ -172,30 +172,45 @@
 
     // Booking Page
     const Booking = () => {
-      const [formData, setFormData] = useState({ name: "", email: "", date: "" });
+  const [formData, setFormData] = React.useState({ name: "", email: "", date: "" });
 
-      const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-      };
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-      const handleSubmit = (e) => {
-        e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("/api/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
         alert("Booking Confirmed!");
-      };
+        setFormData({ name: "", email: "", date: "" });
+      } else {
+        alert("Booking Failed!");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Error booking room.");
+    }
+  };
 
-      return (
-        <div className="container">
-          <h1>Book a Room</h1>
-          <form onSubmit={handleSubmit}>
-            <input type="text" name="name" placeholder="Your Name" required onChange={handleChange} />
-            <input type="email" name="email" placeholder="Your Email" required onChange={handleChange} />
-            <input type="date" name="date" required onChange={handleChange} />
-            <button type="submit">Book Now</button>
-          </form>
-        </div>
-      );
-    };
-
+  return (
+    <div className="container">
+      <h1>Book a Room</h1>
+      <form onSubmit={handleSubmit}>
+        <input type="text" name="name" placeholder="Your Name" required onChange={handleChange} value={formData.name} />
+        <input type="email" name="email" placeholder="Your Email" required onChange={handleChange} value={formData.email} />
+        <input type="date" name="date" required onChange={handleChange} value={formData.date} />
+        <button type="submit">Book Now</button>
+      </form>
+    </div>
+  );
+};
     // Main App Component
     const App = () => {
       const [page, setPage] = useState("home");
