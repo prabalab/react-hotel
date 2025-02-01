@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury Hotel</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.3/babel.min.js"></script>
+    
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            background: linear-gradient(to right, #ff9a9e, #fad0c4);
+        }
+        h1 {
+            color: #fff;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+        }
+        p {
+            font-size: 1.1rem;
+            color: #fff;
+        }
+
+        /* Navbar */
+        nav {
+            background-color: #222;
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        nav button {
+            background: #ff7675;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        nav button:hover {
+            background: #ff4747;
+            transform: scale(1.1);
+        }
+
+        /* Container */
+        .container {
+            padding: 2rem;
+        }
+
+        /* Rooms Styling */
+        .room-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            margin: 20px auto;
+            width: 50%;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        .room-card:hover {
+            transform: scale(1.05);
+        }
+        .room-card h3 {
+            color: #ff7675;
+        }
+        .room-card p {
+            color: #333;
+            font-weight: bold;
+        }
+
+        /* Booking Form */
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 40%;
+            margin: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            background: #ff7675;
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #ff4747;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #222;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    // Navbar Component
+    const Navbar = ({ setPage }) => (
+      <nav>
+        <button onClick={() => setPage("home")}>Home</button>
+        <button onClick={() => setPage("rooms")}>Rooms</button>
+        <button onClick={() => setPage("booking")}>Book Now</button>
+      </nav>
+    );
+
+    // Footer Component
+    const Footer = () => <footer><p>© 2025 Luxury Hotel. All Rights Reserved.</p></footer>;
+
+    // Home Page
+    const Home = () => (
+      <div className="container">
+        <h1>Welcome to Luxury Hotel</h1>
+        <p>Experience the ultimate luxury and comfort with us.</p>
+      </div>
+    );
+
+    // Rooms Page
+    const Rooms = () => {
+      const [rooms, setRooms] = useState([]);
+
+      useEffect(() => {
+        setRooms([
+          { id: 1, name: "Deluxe Room", price: 100 },
+          { id: 2, name: "Suite", price: 200 },
+          { id: 3, name: "Penthouse", price: 500 },
+        ]);
+      }, []);
+
+      return (
+        <div className="container">
+          <h1>Our Rooms</h1>
+          {rooms.map(room => (
+            <div key={room.id} className="room-card">
+              <h3>{room.name}</h3>
+              <p>Price: ${room.price} per night</p>
+            </div>
+          ))}
+        </div>
+      );
+    };
+
+    // Booking Page
+    const Booking = () => {
+      const [formData, setFormData] = useState({ name: "", email: "", date: "" });
+
+      const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+      };
+
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        alert("Booking Confirmed!");
+      };
+
+      return (
+        <div className="container">
+          <h1>Book a Room</h1>
+          <form onSubmit={handleSubmit}>
+            <input type="text" name="name" placeholder="Your Name" required onChange={handleChange} />
+            <input type="email" name="email" placeholder="Your Email" required onChange={handleChange} />
+            <input type="date" name="date" required onChange={handleChange} />
+            <button type="submit">Book Now</button>
+          </form>
+        </div>
+      );
+    };
+
+    // Main App Component
+    const App = () => {
+      const [page, setPage] = useState("home");
+
+      return (
+        <>
+          <Navbar setPage={setPage} />
+          {page === "home" && <Home />}
+          {page === "rooms" && <Rooms />}
+          {page === "booking" && <Booking />}
+          <Footer />
+        </>
+      );
+    };
+
+    // Render App
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+</body>
+</html>
