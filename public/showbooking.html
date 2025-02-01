@@ -1,0 +1,80 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+<script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script> 
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script> 
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script> 
+<script src="https://unpkg.com/browse/react-hook-use-state@1.1.0/src/index.js"></script>
+</head>
+<body> 
+<div id="root"></div>
+<script type="text/babel"> 
+
+const { useState, useEffect } = React;
+
+const BookingList = () => {
+  const [bookings, setBookings] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    // Fetch bookings from the backend API
+    const fetchBookings = async () => {
+      try {
+        const response = await fetch('/api/bookings');
+        const data = await response.json();
+        setBookings(data);
+        setLoading(false);
+      } catch (err) {
+        setError('Error fetching booking data');
+        setLoading(false);
+      }
+    };
+
+    fetchBookings();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+  return (
+    <div className="container">
+      <h1>Booking List</h1>
+      <ul>
+        {bookings.map((booking) => (
+          <li key={booking._id}>
+            <h3>{booking.name}</h3>
+            <p>Email: {booking.email}</p>
+            <p>Date: {booking.date}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+</script>
+<script type="text/babel"> 
+class App extends React.Component
+{
+    render()
+    {
+        return(
+            <div>
+            <h1>Hotel Booking System</h1>
+            <BookingList />
+            </div>
+            )
+    }
+}
+const root = ReactDOM.createRoot(document.getElementById('root')); 
+root.render(<App />);
+</script>
+
+</body>
+</html>
