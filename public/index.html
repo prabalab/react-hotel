@@ -147,28 +147,34 @@
 
     // Rooms Page
     const Rooms = () => {
-      const [rooms, setRooms] = useState([]);
+  const [rooms, setRooms] = useState([]);
 
-      useEffect(() => {
-        setRooms([
-          { id: 1, name: "Deluxe Room", price: 100 },
-          { id: 2, name: "Suite", price: 200 },
-          { id: 3, name: "Penthouse", price: 500 },
-        ]);
-      }, []);
-
-      return (
-        <div className="container">
-          <h1>Our Rooms</h1>
-          {rooms.map(room => (
-            <div key={room.id} className="room-card">
-              <h3>{room.name}</h3>
-              <p>Price: ${room.price} per night</p>
-            </div>
-          ))}
-        </div>
-      );
+  useEffect(() => {
+    const fetchRooms = async () => {
+      try {
+        const response = await fetch("/api/rooms"); // Backend API
+        const data = await response.json();
+        setRooms(data);
+      } catch (error) {
+        console.error("Error fetching rooms:", error);
+      }
     };
+
+    fetchRooms();
+  }, []);
+
+  return (
+    <div className="container">
+      <h1>Our Rooms</h1>
+      {rooms.map(room => (
+        <div key={room._id} className="room-card">
+          <h3>{room.name}</h3>
+          <p>Price: ${room.price} per night</p>
+        </div>
+      ))}
+    </div>
+  );
+};
 
     // Booking Page
     const Booking = () => {
