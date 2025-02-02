@@ -5,6 +5,25 @@
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script> 
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<style>
+  .header {
+    height: 200px;
+    width: 100%;
+    border: 1px solid green;
+}
+.container {
+    display: flex;
+}
+.sidebar {
+    height: 100vh;
+    border: 1px solid green;
+}
+.main-container {
+    height: 100vh;
+    width: 100%;
+    border: 1px solid green;
+}
+</style>
 </head>
 <body> 
 <div id="root"></div>
@@ -281,10 +300,16 @@ class App extends React.Component {
   render() {
     return (
       <div>
+        <div class="header">header</div>
+<div class="container">
+<div class="sidebar">sidebar</div>
+<div class="main-container">
         <h1>Hotel Booking System</h1>
         <BookingList />
         <Rooms />
         <InsertHome />
+</div>
+</div>
       </div>
     );
   }
