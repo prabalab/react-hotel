@@ -5,6 +5,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const bookingRoutes = require("./routes/bookingRoutes");
 const path = require("path");
+const roomRoutes = require("./routes/roomRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -36,6 +37,7 @@ app.get("/show-booking", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "showbooking.html"));
 });
 
+app.use("/api/rooms", roomRoutes); // Mount rooms API
 
 // Start the server
 app.listen(PORT, () => {
