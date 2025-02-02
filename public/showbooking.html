@@ -3,7 +3,8 @@
 <head> 
 <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script> 
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script> 
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script> 
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body> 
 <div id="root"></div>
@@ -174,36 +175,68 @@ const Rooms = () => {
 };
 
 
+const API_URL = "/api/home";
+
 const InsertHome = () => {
   const [homeData, setHomeData] = useState({ title: "", description: "" });
+  const [homes, setHomes] = useState([]);
+  const [editingId, setEditingId] = useState(null);
 
+  useEffect(() => {
+    fetchHomes();
+  }, []);
+
+  // Fetch existing data
+  const fetchHomes = async () => {
+    try {
+      const response = await axios.get(API_URL);
+      setHomes(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  // Handle input change
   const handleChange = (e) => {
     setHomeData({ ...homeData, [e.target.name]: e.target.value });
   };
 
+  // Handle form submission (Insert or Update)
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      const response = await fetch("/api/home", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(homeData),
-      });
-
-      const data = await response.json();
-      alert(data.message);
-      setHomeData({ title: "", description: "" }); // Clear the form
+      if (editingId) {
+        await axios.put(`${API_URL}/${editingId}`, homeData);
+      } else {
+        await axios.post(API_URL, homeData);
+      }
+      setHomeData({ title: "", description: "" });
+      setEditingId(null);
+      fetchHomes();
     } catch (error) {
-      console.error("Error inserting data:", error);
+      console.error("Error submitting data:", error);
+    }
+  };
+
+  // Handle edit button
+  const handleEdit = (home) => {
+    setHomeData({ title: home.title, description: home.description });
+    setEditingId(home._id);
+  };
+
+  // Handle delete button
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`${API_URL}/${id}`);
+      fetchHomes();
+    } catch (error) {
+      console.error("Error deleting data:", error);
     }
   };
 
   return (
     <div>
-      <h2>Insert Home Data</h2>
+      <h2>{editingId ? "Edit Home Data" : "Insert Home Data"}</h2>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -223,11 +256,23 @@ const InsertHome = () => {
           required
         />
         <br />
-        <button type="submit">Insert Data</button>
+        <button type="submit">{editingId ? "Update Data" : "Insert Data"}</button>
       </form>
+
+      <h3>Existing Home Data</h3>
+      <ul>
+        {homes.map((home) => (
+          <li key={home._id}>
+            <strong>{home.title}</strong> - {home.description} 
+            <button onClick={() => handleEdit(home)}>Edit</button>
+            <button onClick={() => handleDelete(home._id)}>Delete</button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
+
 
 </script>
 
