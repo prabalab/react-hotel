@@ -40,6 +40,9 @@ app.get("/show-booking", (req, res) => {
 
 app.use("/api/rooms", roomRoutes); // Mount rooms API
 
+// Use Home Routes
+app.use("/api/home", homeRoutes);
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
