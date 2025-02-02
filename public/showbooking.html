@@ -4,12 +4,11 @@
 <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script> 
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script> 
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script> 
-<script src="https://unpkg.com/browse/react-hook-use-state@1.1.0/src/index.js"></script>
 </head>
 <body> 
 <div id="root"></div>
-<script type="text/babel"> 
 
+<script type="text/babel"> 
 const { useState, useEffect } = React;
 
 const BookingList = () => {
@@ -34,6 +33,20 @@ const BookingList = () => {
     fetchBookings();
   }, []);
 
+  // Delete booking
+  const handleDelete = async (id) => {
+    try {
+      const response = await fetch(`/api/bookings/${id}`, { method: 'DELETE' });
+      if (response.ok) {
+        setBookings(bookings.filter(booking => booking._id !== id));
+      } else {
+        alert('Failed to delete booking');
+      }
+    } catch (error) {
+      alert('Error deleting booking');
+    }
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -51,6 +64,7 @@ const BookingList = () => {
             <h3>{booking.name}</h3>
             <p>Email: {booking.email}</p>
             <p>Date: {booking.date}</p>
+            <button onClick={() => handleDelete(booking._id)}>Delete</button>
           </li>
         ))}
       </ul>
@@ -59,19 +73,19 @@ const BookingList = () => {
 };
 
 </script>
+
 <script type="text/babel"> 
-class App extends React.Component
-{
-    render()
-    {
-        return(
-            <div>
-            <h1>Hotel Booking System</h1>
-            <BookingList />
-            </div>
-            )
-    }
+class App extends React.Component {
+  render() {
+    return (
+      <div>
+        <h1>Hotel Booking System</h1>
+        <BookingList />
+      </div>
+    );
+  }
 }
+
 const root = ReactDOM.createRoot(document.getElementById('root')); 
 root.render(<App />);
 </script>
