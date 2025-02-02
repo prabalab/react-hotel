@@ -143,7 +143,7 @@ const Home = () => {
   const [homeData, setHomeData] = useState({ title: "", description: "" });
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/home")
+    fetch("/api/home")
       .then((res) => res.json())
       .then((data) => setHomeData(data))
       .catch((error) => console.error("Error fetching data:", error));
