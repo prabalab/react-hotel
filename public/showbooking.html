@@ -304,9 +304,9 @@ const InsertHome = () => {
 </script>
 
 <script type="text/babel"> 
-class App extends React.Component {
+const App = () => {
   const [page, setPage] = useState("showBooking");
-  render() {
+  
     return (
       <div>
         <div class="header">header</div>
@@ -321,8 +321,7 @@ class App extends React.Component {
 </div>
       </div>
     );
-  }
-}
+};
 
 const root = ReactDOM.createRoot(document.getElementById('root')); 
 root.render(<App />);
