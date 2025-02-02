@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const bookingRoutes = require("./routes/bookingRoutes");
 const path = require("path");
 const roomRoutes = require("./routes/roomRoutes");
+const homeRoutes = require("./routes/homeRoutes"); // Import routes
 
 const app = express();
 const PORT = process.env.PORT || 5000;
