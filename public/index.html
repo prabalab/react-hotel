@@ -140,19 +140,28 @@
     // Home Page
 
 const Home = () => {
-  const [homeData, setHomeData] = useState({ title: "", description: "" });
+  const [homeData, setHomeData] = useState([]); // Store an array of home entries
 
   useEffect(() => {
-    fetch("/api/home")
+    fetch("/api/home") // Ensure correct backend URL
       .then((res) => res.json())
-      .then((data) => setHomeData(homes))
+      .then((data) => setHomeData(data)) // Set the fetched array
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
 
   return (
     <div className="container">
-      <h1>{homeData.title}</h1>
-      <p>{homeData.description}</p>
+      <h1>Home Data</h1>
+      {homeData.length === 0 ? (
+        <p>No data available.</p>
+      ) : (
+        homeData.map((home) => (
+          <div key={home._id} className="home-item">
+            <h2>{home.title}</h2>
+            <p>{home.description}</p>
+          </div>
+        ))
+      )}
     </div>
   );
 };
