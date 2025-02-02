@@ -31,6 +31,14 @@
 <script type="text/babel"> 
 const { useState, useEffect } = React;
 
+  const Sidebar = ({ setPage }) => (
+  <nav>
+    <button onClick={() => setPage("showBooking")}>Show Booking</button>
+    <button onClick={() => setPage("setroom")}>Set Rooms</button>
+    <button onClick={() => setPage("sethome")}>Set home</button>
+  </nav>
+);
+
 const BookingList = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -297,17 +305,18 @@ const InsertHome = () => {
 
 <script type="text/babel"> 
 class App extends React.Component {
+  const [page, setPage] = useState("showBooking");
   render() {
     return (
       <div>
         <div class="header">header</div>
 <div class="container">
-<div class="sidebar">sidebar</div>
+<div class="sidebar"><Sidebar setPage={setPage} /></div>
 <div class="main-container">
         <h1>Hotel Booking System</h1>
-        <BookingList />
-        <Rooms />
-        <InsertHome />
+  {page === "showBooking" && <BookingList />}
+  {page === "setroom" && <Rooms />}
+  {page === "sethome" && <InsertHome />}
 </div>
 </div>
       </div>
