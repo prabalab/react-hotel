@@ -24,7 +24,7 @@ router.get("/", async (req, res) => {
 });
 
 //Delete a booking by ID
-app.delete("/:id", async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const deletedBooking = await Booking.findByIdAndDelete(id);
