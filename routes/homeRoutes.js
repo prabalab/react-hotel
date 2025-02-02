@@ -27,4 +27,15 @@ router.post("/", async (req, res) => {
   }
 });
 
+//PUT update home data
+router.put("/:id", async (req, res) => {
+  try {
+    const home = await Home.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!home) return res.status(404).json({ message: "Data not found" });
+    res.json({ message: "Data updated successfully!" });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
 module.exports = router;
