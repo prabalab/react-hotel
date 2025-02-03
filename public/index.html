@@ -180,7 +180,7 @@ const Home = () => {
   return (
     <div className="container">
       {homeData.length === 0 ? (
-        <p>No data available.</p>
+        <p>Loading...</p>
       ) : (
         homeData.map((home) => (
           <div key={home._id} className="home-item">
